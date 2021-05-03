@@ -4,6 +4,8 @@ export interface Task {
   description: string;
   userId: number;
   time: number;
+  TaskDate: string;
+
 }
 
 export interface TaskResponse extends Task {
@@ -13,4 +15,6 @@ export interface TaskResponse extends Task {
   createdAt: string;
   updatedAt: string;
   time: number;
+  TaskDate: string;
+
 }

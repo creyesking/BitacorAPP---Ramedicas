@@ -5,7 +5,9 @@ import { User } from '../entity/User';
 import { validate } from 'class-validator';
 
 export class UserController {
+
   static getAll = async (req: Request, res: Response) => {
+    console.log('X');
     const userRepository = getRepository(User);
     let users: any;
 

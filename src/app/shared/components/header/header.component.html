@@ -9,10 +9,13 @@
       <mat-icon>menu</mat-icon>
     </button>
   </ng-container>
-  <span>RAMEDICAS BITACORA APP</span>
+
+  <img src="https://devo-client.ramedicas.com/assets/images/logo-text.png"/>
+  <span class="spacer"></span>
+  <span ><a>BITACORAPP</a></span>
   <span class="spacer"></span>
   <a *ngIf="!isLogged; else viewLogout" mat-button routerLink="/login">Login</a>
-  
+
 </mat-toolbar>
 
 <ng-template #viewLogout>

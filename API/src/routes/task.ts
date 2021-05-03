@@ -12,10 +12,10 @@ router.get('/', TaskController.getAll);
 router.get('/:userId', TaskController.getByUserId);
 
 
-router.get('/task/:id', TaskController.getById);
+// router.get('/task/:id', TaskController.getById);
 
 // Create a new tasks
-router.post('/', TaskController.new);
+router.post('/', [checkJwt], TaskController.new);
 
 // Edit tasks
 router.patch('/:id', TaskController.edit);

@@ -11,4 +11,5 @@ export interface UserResponse extends User {
   token: string;
   userId: number;
   role: Roles;
+  area: string;
 }

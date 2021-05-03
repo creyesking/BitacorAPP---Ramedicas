@@ -15,6 +15,7 @@ export class BaseFormUser {
     ],
     password: ['', [Validators.required, Validators.minLength(5)]],
     role: ['', [Validators.required]],
+
     area: ['']
   });
 

@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { BaseFormUser } from '@shared/utils/base-form-user';
 import { AuthService } from '@auth/auth.service';
 import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -16,7 +16,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private authSvc: AuthService,
     private router: Router,
-    public loginForm: BaseFormUser
+    public loginForm: BaseFormUser,
+    private toastr: ToastrService,
   ) {}
 
   ngOnInit(): void {
@@ -30,17 +31,18 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   onLogin(): void {
     if (this.loginForm.baseForm.invalid) {
-      return;
+      return console.log('invalid');
     }
 
     const formValue = this.loginForm.baseForm.value;
     this.subscription.add(
       this.authSvc.login(formValue).subscribe((res) => {
         if (res) {
-          this.router.navigate(['']);
+          this.router.navigate(['binnacle']);
         }
       })
     );
+
   }
 
   checkField(field: string): boolean {

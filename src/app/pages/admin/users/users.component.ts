@@ -1,4 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
+
 import { UsersService } from './../services/users.service';
 import {
   AfterViewInit,
@@ -12,44 +13,57 @@ import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalComponent } from './../components/modal/modal.component';
 import { Subject } from 'rxjs';
-import { UserResponse } from '@app/shared/models/user.interface';
+import { MatPaginator } from '@angular/material/paginator';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
 })
 export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
-  [x: string]: any;
+
   userId = null;
-  displayedColumns: string[] = ['id', 'role', 'username', 'actions'];
+  displayedColumns: string[] = ['id', 'role', 'area', 'username', 'actions'];
   dataSource = new MatTableDataSource();
 
   private destroy$ = new Subject<any>();
 
   @ViewChild(MatSort) sort: MatSort;
-  constructor(private userSvc: UsersService, private dialog: MatDialog) {}
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  constructor(private userSvc: UsersService, private dialog: MatDialog, private toastr: ToastrService) {}
 
   ngOnInit(): void {
 
     this.userSvc.getAll().subscribe((users) => {
+      console.log('mis datos ->', users);
       this.dataSource.data = users;
     });
-
-
 
   }
 
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
+
+  filtrar(event: Event) {
+    const filtro = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filtro.trim().toLowerCase();
+  }
+
+
+
   onDelete(userId: number): void {
-    if (window.confirm('Do you really want remove this user')) {
+    if (window.confirm('Estás seguro que quieres borrar este usuario?')) {
       this.userSvc
         .delete(userId)
         .pipe(takeUntil(this.destroy$))
         .subscribe((res) => {
-          window.alert(res);
           // Update result after deleting the user.
+          this.toastr.success(
+            `Eliminaste este usuario`,
+            'BitacorAPP'
+          );
           this.userSvc.getAll().subscribe((users) => {
             this.dataSource.data = users;
           });
@@ -69,7 +83,12 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
       console.log(`Dialog result: ${result}`, typeof result);
       // Update result after adding new user.
       this.userSvc.getAll().subscribe((users) => {
+        this.toastr.success(
+          `Lista de usuarios actualizada`,
+          'BitacorAPP'
+        );
         this.dataSource.data = users;
+
       });
     });
   }

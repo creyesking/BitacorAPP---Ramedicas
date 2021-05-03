@@ -3,6 +3,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { BaseFormUser } from '@shared/utils/base-form-user';
+import { ToastrService } from 'ngx-toastr';
 enum Action {
   EDIT = 'edit',
   NEW = 'new',
@@ -19,7 +20,8 @@ export class ModalComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public userForm: BaseFormUser,
-    private userSvc: UsersService
+    private userSvc: UsersService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -33,15 +35,30 @@ export class ModalComponent implements OnInit {
     }
   }
 
+  showSuccess(): void {
+    this.toastr.success(
+      `Creaste este usuario`,
+      'BitacorAPP'
+    );
+  }
+
   onSave(): void {
     const formValue = this.userForm.baseForm.value;
+    const userId = this.data?.user?.id;
     if (this.actionTODO === Action.NEW) {
       this.userSvc.new(formValue).subscribe((res) => {
+        this.toastr.success(
+          `Creaste este usuario`,
+          'BitacorAPP'
+        );
         console.log('New ', res);
       });
     } else {
-      const userId = this.data?.user?.id;
       this.userSvc.update(userId, formValue).subscribe((res) => {
+        this.toastr.success(
+          `Actualizaste este usuario`,
+          'BitacorAPP'
+        );
         console.log('Update', res);
       });
     }

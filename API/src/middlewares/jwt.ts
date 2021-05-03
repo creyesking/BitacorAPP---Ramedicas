@@ -3,20 +3,21 @@ import * as jwt from 'jsonwebtoken';
 import config from '../config/config';
 
 export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
-  const token = <string>req.headers['auth'];
-  let jwtPayload;
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(' ').pop();
 
-  try {
-    jwtPayload = <any>jwt.verify(token, config.jwtSecret);
-    res.locals.jwtPayload = jwtPayload;
-  } catch (e) {
-    return res.status(401).json({ message: 'Not Authorized' });
+  if (token == null) {
+    return res.sendStatus(401);
   }
 
-  const { userId, username } = jwtPayload;
+  jwt.verify(token, config.jwtSecret, (err: any, user: any) => {
+    if (err) {
+      return res.sendStatus(403);
+    }
 
-  const newToken = jwt.sign({ userId, username }, config.jwtSecret, { expiresIn: '1h' });
-  res.setHeader('token', newToken);
-  // Call next
+     req['user'] = user;
+  });
+
+
   next();
 };

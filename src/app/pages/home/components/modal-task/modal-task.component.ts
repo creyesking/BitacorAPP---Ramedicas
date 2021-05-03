@@ -3,6 +3,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { BaseFormTask } from '@shared/utils/base-form-task';
+import { AuthService } from '@app/pages/auth/auth.service';
+import { UserResponse } from '@app/shared/models/user.interface';
 enum Action {
   EDIT = 'edit',
   NEW = 'new',
@@ -13,21 +15,25 @@ enum Action {
   templateUrl: './modal-task.component.html',
   styleUrls: ['./modal-task.component.scss']
 })
+
 export class ModalTaskComponent implements OnInit {
   actionTODO = Action.NEW;
-
+  userId = null;
   hide = true;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data2: any,
     public taskForm: BaseFormTask,
-    private taskSvc: BinnacleService
-  ) {}
+    private taskSvc: BinnacleService,
+    public authSvc: AuthService  ) {}
 
   ngOnInit(): void {
+
     if (this.data2?.task.hasOwnProperty('id')) {
       this.actionTODO = Action.EDIT;
       this.taskForm.baseForm.get('description').setValidators(null);
       this.taskForm.baseForm.get('time').setValidators(null);
+      this.taskForm.baseForm.get('TaskDate').setValidators(null);
+      this.taskForm.baseForm.get('hour').setValidators(null);
       this.taskForm.baseForm.updateValueAndValidity();
       this.data2.title = 'Editar tarea';
       this.pathFormData();
@@ -36,6 +42,7 @@ export class ModalTaskComponent implements OnInit {
 
   onSave(): void {
     const formValue = this.taskForm.baseForm.value;
+    console.log(this.actionTODO);
     if (this.actionTODO === Action.NEW) {
       this.taskSvc.new(formValue).subscribe((res) => {
         console.log('New ', res);
@@ -55,8 +62,9 @@ export class ModalTaskComponent implements OnInit {
   private pathFormData(): void {
     this.taskForm.baseForm.patchValue({
       description: this.data2?.task?.description,
-      userId: this.data2?.task?.userId,
+      userId: JSON.parse(localStorage.getItem('user.userId')),
       time: this.data2?.time?.task?.time,
+      TaskDate: this.data2?.tast?.TaskDate,
 
       });
   }

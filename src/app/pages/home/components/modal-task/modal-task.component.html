@@ -1,67 +1,64 @@
 <h2 mat-dialog-title>{{ data2?.title }}</h2>
 
-<mat-dialog-actions> </mat-dialog-actions>
 <mat-dialog-content>
   <div class="modal-form">
     <form [formGroup]="taskForm.baseForm">
       <mat-form-field class="full-width-input">
-        <mat-label>Cambiar Descripcion </mat-label>
-        <input
+        <textarea
+        cdkTextareaAutosize
+          #autosize="cdkTextareaAutosize"
+          cdkAutosizeMinRows="1"
+          cdkAutosizeMaxRows="5"
           formControlName="description"
           matInput
           placeholder="Descripcion"
           required
-        />
+        ></textarea>
         <mat-error *ngIf="checkField('description')">
           {{ taskForm.errorMessage }}
         </mat-error>
       </mat-form-field>
       <mat-form-field class="full-width-input">
-        <mat-label>Tiempo en minutos </mat-label>
-        <input
+        <textarea
+        cdkTextareaAutosize
+          #autosize="cdkTextareaAutosize"
+          cdkAutosizeMinRows="1"
+          cdkAutosizeMaxRows="5"
           formControlName="time"
           matInput
           placeholder="Tiempo en minutos"
           required
-        />
+        ></textarea>
         <mat-error *ngIf="checkField('time')">
           {{ taskForm.errorMessage }}
         </mat-error>
       </mat-form-field>
-      <!-- <mat-form-field class="full-width-input" *ngIf="showPasswordField">
-        <input
-          [type]="hide ? 'password' : 'text'"
-          formControlName="password"
-          matInput
-          placeholder="Contraseña"
-          required
-        />
-        <button mat-icon-button matSuffix (click)="hide = !hide">
-          <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
-        </button>
-        <mat-error *ngIf="checkField('password')">
-          {{ userForm.errorMessage }}
+
+      <mat-form-field class="full-width-input">
+        <input matInput [matDatepicker]="picker1"
+        formControlName="TaskDate"
+        placeholder="Fecha de actividad"
+        required
+        >
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+        <mat-error *ngIf="checkField('TaskDate')">
+          {{ taskForm.errorMessage }}
         </mat-error>
       </mat-form-field>
-      <mat-form-field class="full-width-input">
-        <mat-label>Cambiar Rol </mat-label>
-        <mat-select formControlName="role">
-          <mat-option value="suscriptor">Colaborador</mat-option>
-          <mat-option value="admin">Administrador</mat-option>
-        </mat-select>
-        <mat-error *ngIf="checkField('role')">
-          {{ userForm.errorMessage }}
-        </mat-error>
-      </mat-form-field> -->
 
       <!-- <mat-form-field class="full-width-input">
-          <input
-            formControlName="area"
-            matInput
-            placeholder="area"
+      <div class="ngx-timepicker-field-example">
+        <ngx-timepicker-field [controlOnly]="true" formControlName="Hour"
+        placeholder="Hora de Actividad"
+        required></ngx-timepicker-field>
+        <mat-error *ngIf="checkField('hour')">
+          {{ taskForm.errorMessage }}
+        </mat-error>
+    </div>
+  </mat-form-field> -->
 
-          />
-          </mat-form-field> -->
+
     </form>
   </div>
 </mat-dialog-content>

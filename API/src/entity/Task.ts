@@ -16,6 +16,12 @@ export class Task {
   @IsNotEmpty()
   time: string;
 
+
+  @Column()
+  @IsNotEmpty()
+  TaskDate: string;
+
+
   @ManyToOne(() => User, u => u.tasks)
   User!: User;
 

@@ -7,6 +7,10 @@ import { validate } from 'class-validator';
 export class TaskController {
   static getAll = async (req: Request, res: Response) => {
     const taskRepository = getRepository(Task);
+    // const user = await taskRepository.createQueryBuilder('user')
+
+    // .paginate();
+    // res.status(200).json(user);
 
     let tasks;
 
@@ -16,6 +20,7 @@ export class TaskController {
           'id',
           'description',
           'time',
+          'TaskDate',
           'userId',
           'createdAt',
           'updatedAt',
@@ -30,7 +35,7 @@ export class TaskController {
     } else {
       res.status(404).json({ message: 'Not result' });
     }
-  }
+  };
 
   static getById = async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -41,7 +46,7 @@ export class TaskController {
     } catch (e) {
       res.status(404).json({ message: 'Not result' });
     }
-  }
+  };
 
   static getByUserId = async (req: Request, res: Response) => {
     const { userId } = req.params;
@@ -56,6 +61,7 @@ export class TaskController {
           'userId',
           'createdAt',
           'updatedAt',
+          'TaskDate',
         ],
         where: { userId },
       });
@@ -63,15 +69,19 @@ export class TaskController {
     } catch (e) {
       res.status(404).json({ message: 'Not result' });
     }
-  }
+  };
 
   static new = async (req: Request, res: Response) => {
-    const { description, time, userId } = req.body;
+
+    const { description, time, TaskDate } = req.body;
+    const { userId } = req['user'];
     const task = new Task();
 
     task.description = description;
     task.time = time;
     task.userId = userId;
+    task.TaskDate = TaskDate;
+
 
     const validationOpt = { validationError: { target: false, value: false } };
     const errors = await validate(task, validationOpt);
@@ -89,12 +99,12 @@ export class TaskController {
       return res.status(409).json({ message: 'taskname already exist' });
     }
     res.send(taskInstance);
-  }
+  };
 
   static edit = async (req: Request, res: Response) => {
     let task: any;
     const { id } = req.params;
-    const { description, time, userId } = req.body;
+    const { description, time, userId, TaskDate } = req.body;
 
     const taskRepository = getRepository(Task);
 
@@ -104,6 +114,8 @@ export class TaskController {
       task.description = description;
       task.time = time;
       task.userId = userId;
+      task.TaskDate = TaskDate;
+
     } catch (e) {
       return res.status(404).json({ message: 'task not found' });
     }
@@ -123,7 +135,7 @@ export class TaskController {
     }
 
     res.status(201).json({ message: 'task update' });
-  }
+  };
 
   static delete = async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -139,7 +151,7 @@ export class TaskController {
     // Remove task
     taskRepository.delete(id);
     res.status(201).json({ message: ' task deleted' });
-  }
+  };
 }
 
 export default TaskController;

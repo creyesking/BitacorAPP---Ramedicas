@@ -4,12 +4,12 @@ import { Observable, throwError } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 import { User } from '@app/shared/models/user.interface';
-
+import { ToastrService } from 'ngx-toastr';
 @Injectable({
   providedIn: 'root',
 })
 export class UsersService {
-  constructor(private http: HttpClient) {}
+  constructor(private toastr: ToastrService, private http: HttpClient) {}
 
   getAll(): Observable<User[]> {
     return this.http
@@ -24,9 +24,11 @@ export class UsersService {
   }
 
   new(user: User): Observable<User> {
+
     return this.http
       .post<User>(`${environment.API_URL}/users`, user)
       .pipe(catchError(this.handlerError));
+
   }
 
   update(userId: number, user: User): Observable<User> {
@@ -42,11 +44,15 @@ export class UsersService {
   }
 
   handlerError(error): Observable<never> {
-    let errorMessage = 'Error unknown';
+    let errorMessage = 'An errror occured retrienving data';
     if (error) {
-      errorMessage = `Error ${error.message}`;
+      errorMessage = `Error: code ${error.message}`;
     }
-    window.alert(errorMessage);
-    return throwError(errorMessage);
+    const err = this.toastr.error(
+      `Ah ocurrido un error!!`,
+      'BitacorAPP'
+    );
+    console.log(errorMessage);
+    return throwError(err);
   }
 }

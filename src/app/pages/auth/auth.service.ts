@@ -3,10 +3,10 @@ import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
-
 import { UserResponse, User, Roles } from '@shared/models/user.interface';
 import { catchError, map } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { ToastrService } from 'ngx-toastr';
 
 const helper = new JwtHelperService();
 
@@ -16,7 +16,11 @@ const helper = new JwtHelperService();
 export class AuthService {
   private user = new BehaviorSubject<UserResponse>(null);
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private toastr: ToastrService
+  ) {
     this.checkToken();
   }
   get user$(): Observable<UserResponse> {
@@ -33,17 +37,25 @@ export class AuthService {
       .pipe(
         map((user: UserResponse) => {
           this.saveLocalStorage(user);
+          this.toastr.success(
+            `${authData.username} Iniciaste sesion`,
+            'BitacorAPP'
+          );
           this.user.next(user);
           return user;
         }),
-        catchError((err) => this.handlerError(err))
-      );
+        catchError((err) => this.handlerError(err)
+      ));
   }
 
   logout(): void {
     localStorage.removeItem('user');
     this.user.next(null);
     this.router.navigate(['/login']);
+    this.toastr.success(
+      `Cerraste sesion`,
+      'BitacorAPP'
+    );
   }
 
   private checkToken(): void {
@@ -65,12 +77,38 @@ export class AuthService {
     localStorage.setItem('user', JSON.stringify(rest));
   }
 
-  private handlerError(err: any): Observable<never> {
-    let errorMessage = 'An errror occured retrienving data';
-    if (err) {
-      errorMessage = `Error: code ${err.message}`;
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('user');
+  }
+
+  getToken(): string {
+    return JSON.parse(localStorage.getItem('user')).token;
+  }
+
+
+  showSuccess() {
+    this.toastr.success('Hello world!', 'Toastr fun!');
+  }
+
+  getRole(): boolean {
+    const role = JSON.parse(localStorage.getItem('user')).role;
+    if (role === 'admin') {
+      return true;
+    } else {
+      return false;
     }
-    window.alert(errorMessage);
-    return throwError(errorMessage);
+  }
+
+  private handlerError(error: any): Observable<never> {
+    let errorMessage = 'An errror occured retrienving data';
+    if (error) {
+      errorMessage = `Error: code ${error.message}`;
+    }
+    const err = this.toastr.error(
+      `usuario o contraseña incorrecta`,
+      'BitacorAPP'
+    );
+    console.log(errorMessage);
+    return throwError(err);
   }
 }

@@ -1,16 +1,23 @@
 <mat-nav-list>
-  <a mat-list-item routerLink="/admin">
+
+  <a mat-list-item routerLink="/home">
+    <mat-icon>home</mat-icon>
+    <span class="nav-link">Home</span>
+  </a>
+  <a mat-list-item *ngIf="isSus === 'admin'" routerLink="/admin">
     <mat-icon>insert_chart_outlined</mat-icon>
-    <span class="nav-link">Dashboard</span>
+    <span class="nav-link">Tablero</span>
   </a>
   <a mat-list-item *ngIf="isSus === 'admin'" routerLink="/admin/users">
     <mat-icon>people</mat-icon>
     <span class="nav-link">Usuarios</span>
   </a>
+
   <a mat-list-item routerLink="/binnacle">
     <mat-icon>view_list</mat-icon>
     <span class="nav-link">Bitacora</span>
   </a>
+
   <a mat-list-item (click)="onExit()">
     <mat-icon>exit_to_app</mat-icon>
     <span class="nav-link">Salir</span>

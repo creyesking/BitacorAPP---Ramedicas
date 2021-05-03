@@ -1,4 +1,3 @@
-import { AuthService } from '@auth/auth.service';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import {
@@ -6,19 +5,30 @@ import {
   HttpRequest,
   HttpHandler,
 } from '@angular/common/http';
-@Injectable()
+import { HttpEvent, HttpErrorResponse } from '@angular/common/http';
+import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { AuthService } from '@app/pages/auth/auth.service';
+@Injectable({
+  providedIn: 'root',
+})
 export class AdminInterceptor implements HttpInterceptor {
-  constructor(private authSvc: AuthService) {}
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
-    if (req.url.includes('users')) {
-      const userValue = this.authSvc.userValue;
-      const authReq = req.clone({
+  constructor(private router: Router, private authService: AuthService) {}
+
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+    if (this.authService.isAuthenticated()) {
+      const token = this.authService.getToken();
+      req = req.clone({
         setHeaders: {
-          auth: userValue.token,
+          Authorization: `Bearer ${token}`,
         },
       });
-      return next.handle(authReq);
     }
+
     return next.handle(req);
   }
 }

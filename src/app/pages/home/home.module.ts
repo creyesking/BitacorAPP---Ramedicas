@@ -3,11 +3,10 @@ import { CommonModule } from '@angular/common';
 
 import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
-import { ModalTaskComponent } from './components/modal-task/modal-task.component';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import {MatDialogModule} from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '@app/material.module';
-
 @NgModule({
   declarations: [HomeComponent],
   imports: [
@@ -15,7 +14,7 @@ import { MaterialModule } from '@app/material.module';
     HomeRoutingModule,
     MatDialogModule,
     ReactiveFormsModule,
-    MaterialModule
-  ]
+    MaterialModule,
+    ]
 })
 export class HomeModule { }

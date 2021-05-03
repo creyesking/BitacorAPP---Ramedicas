@@ -31,7 +31,9 @@ $login-theme: mat-light-theme((
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include angular-material-theme($login-theme);/**
+@include angular-material-theme($login-theme);
+
+/**
 * Generated theme by Material Theme Generator
 * https://materialtheme.arcsine.dev
 */
@@ -41,7 +43,7 @@ $login-theme: mat-light-theme((
 // have to load a single css file for Angular Material in your app.
 
 // Fonts
-@import 'https://fonts.googleapis.com/css?family=Material+Icons+Outlined';
+@import 'https://fonts.googleapis.com/css?family=Material+Icons+Two+Tone';
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
 
 $fontConfig: (
@@ -118,15 +120,15 @@ $mat-dark-theme-foreground: (
 
 // Background config
 // Light bg
-$light-background:    #fafafa;
+$light-background:    #f7f7f7;
 $light-bg-darker-5:   darken($light-background, 5%);
 $light-bg-darker-10:  darken($light-background, 10%);
 $light-bg-darker-20:  darken($light-background, 20%);
 $light-bg-darker-30:  darken($light-background, 30%);
 $light-bg-lighter-5:  lighten($light-background, 5%);
-$dark-bg-tooltip:     lighten(#2c2c2c, 20%);
-$dark-bg-alpha-4:     rgba(#2c2c2c, 0.04);
-$dark-bg-alpha-12:    rgba(#2c2c2c, 0.12);
+$dark-bg-tooltip:     lighten(#5e5e5e, 20%);
+$dark-bg-alpha-4:     rgba(#5e5e5e, 0.04);
+$dark-bg-alpha-12:    rgba(#5e5e5e, 0.12);
 
 $mat-light-theme-background: (
   background:               $light-background,
@@ -147,13 +149,13 @@ $mat-light-theme-background: (
 );
 
 // Dark bg
-$dark-background:     #2c2c2c;
+$dark-background:     #5e5e5e;
 $dark-bg-lighter-5:   lighten($dark-background, 5%);
 $dark-bg-lighter-10:  lighten($dark-background, 10%);
 $dark-bg-lighter-20:  lighten($dark-background, 20%);
 $dark-bg-lighter-30:  lighten($dark-background, 30%);
-$light-bg-alpha-4:    rgba(#fafafa, 0.04);
-$light-bg-alpha-12:   rgba(#fafafa, 0.12);
+$light-bg-alpha-4:    rgba(#f7f7f7, 0.04);
+$light-bg-alpha-12:   rgba(#f7f7f7, 0.12);
 
 // Background palette for dark themes.
 $mat-dark-theme-background: (
@@ -180,45 +182,45 @@ $mat-dark-theme-background: (
 // Theme Config
 
 body {
-  --primary-color: #3371cc;
-  --primary-lighter-color: #c2d4f0;
-  --primary-darker-color: #2054b9;
-  --text-primary-color: #{$light-primary-text};
+  --primary-color: #ff8001;
+  --primary-lighter-color: #ffd9b3;
+  --primary-darker-color: #ff6301;
+  --text-primary-color: #{$dark-primary-text};
   --text-primary-lighter-color: #{$dark-primary-text};
-  --text-primary-darker-color: #{$light-primary-text};
+  --text-primary-darker-color: #{$dark-primary-text};
 }
 
 $mat-primary: (
-  main: #3371cc,
-  lighter: #c2d4f0,
-  darker: #2054b9,
-  200: #3371cc, // For slide toggle,
+  main: #ff8001,
+  lighter: #ffd9b3,
+  darker: #ff6301,
+  200: #ff8001, // For slide toggle,
   contrast : (
-    main: $light-primary-text,
+    main: $dark-primary-text,
     lighter: $dark-primary-text,
-    darker: $light-primary-text,
+    darker: $dark-primary-text,
   )
 );
 $theme-primary: mat-palette($mat-primary, main, lighter, darker);
 
 body {
-  --accent-color: #f77d1f;
-  --accent-lighter-color: #fdd8bc;
-  --accent-darker-color: #f36012;
-  --text-accent-color: #{$dark-primary-text};
+  --accent-color: #0266a4;
+  --accent-lighter-color: #b3d1e4;
+  --accent-darker-color: #014989;
+  --text-accent-color: #{$light-primary-text};
   --text-accent-lighter-color: #{$dark-primary-text};
-  --text-accent-darker-color: #{$dark-primary-text};
+  --text-accent-darker-color: #{$light-primary-text};
 }
 
 $mat-accent: (
-  main: #f77d1f,
-  lighter: #fdd8bc,
-  darker: #f36012,
-  200: #f77d1f, // For slide toggle,
+  main: #0266a4,
+  lighter: #b3d1e4,
+  darker: #014989,
+  200: #0266a4, // For slide toggle,
   contrast : (
-    main: $dark-primary-text,
+    main: $light-primary-text,
     lighter: $dark-primary-text,
-    darker: $dark-primary-text,
+    darker: $light-primary-text,
   )
 );
 $theme-accent: mat-palette($mat-accent, main, lighter, darker);
@@ -272,11 +274,12 @@ $altTheme: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
 
 .material-icons {
   font-size: 24px;
-  font-family: 'Material Icons Outlined', 'Material Icons';
+  font-family: 'Material Icons Two Tone', 'Material Icons';
   .mat-badge-content {
     font-family: 'Roboto';
   }
 }
+
 
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
